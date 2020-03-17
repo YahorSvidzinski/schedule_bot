@@ -24,5 +24,4 @@ public class ScheduleController {
 	public String getNextDay(@RequestBody ScheduleRequest scheduleRequest) {
 		return scheduleService.getNextDay(scheduleRequest);
 	}
-
 }

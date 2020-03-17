@@ -1,15 +1,16 @@
 package com.demo.mslu.schedule.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
  * @author Yahor Svidzinski
  */
 @Data
+@AllArgsConstructor
 public class ScheduleResponse {
 
-	private String day;
 	private String time;
-	private String subjectName;
+	private String subjectAndTeacherName;
 	private String room;
 }
