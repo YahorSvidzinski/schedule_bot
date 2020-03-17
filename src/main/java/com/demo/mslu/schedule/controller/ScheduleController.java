@@ -21,7 +21,7 @@ public class ScheduleController {
 	private ScheduleService scheduleService;
 
 	@PostMapping("/nextday")
-	public String getNextDay(@RequestBody ScheduleRequest scheduleRequest) throws IOException {
+	public String getNextDay(@RequestBody ScheduleRequest scheduleRequest) {
 		return scheduleService.getNextDay(scheduleRequest);
 	}
 
