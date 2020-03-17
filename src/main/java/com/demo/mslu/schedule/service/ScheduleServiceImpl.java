@@ -54,14 +54,17 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	private String convertDayToTelegramResponse(@NotNull Integer day, @NotNull Collection<ScheduleResponse> scheduleResponseForDay) {
-		StringBuilder localizedDay = new StringBuilder(convertDayOfWeekLocalizedFormat(day) + "\n");
+		StringBuilder localizedDay = new StringBuilder("<b>" + convertDayOfWeekLocalizedFormat(day) + "</b>" + "\n");
 		for (ScheduleResponse subject : scheduleResponseForDay) {
 			localizedDay
+					.append("<i>")
 					.append(subject.getTime())
+					.append("</i>")
 					.append("\n")
 					.append(subject.getSubjectAndTeacherName())
 					.append("\n")
 					.append(subject.getRoom())
+					.append("\n")
 					.append("\n");
 		}
 		return localizedDay.toString();
