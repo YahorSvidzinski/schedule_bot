@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
@@ -34,16 +36,35 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public String getNextDay(@NotNull ScheduleRequest scheduleRequest) {
+		int dayOfWeek = LocalDate.now().plusDays(1).getDayOfWeek().getValue();
+		if (dayOfWeek == 6) {
+			scheduleRequest.setWeek(scheduleRequest.getWeek() + 1);
+			dayOfWeek = 1;
+		}
 		final InputStream reportInputStream = scheduleRequester.requestReport(scheduleRequest);
 		try {
 			HSSFSheet sheet = new HSSFWorkbook(reportInputStream).getSheetAt(0);
 			final Multimap<Integer, ScheduleResponse> objects = convertSheetToScheduleMap(sheet);
-			final String value = sheet.getRow(3).getCell(0).getStringCellValue();
-			System.out.println(objects.toString());
+			final Collection<ScheduleResponse> scheduleResponseForDay = objects.get(dayOfWeek);
+			return convertDayToTelegramResponse(dayOfWeek, scheduleResponseForDay);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "Success";
+		throw new IllegalStateException();
+	}
+
+	private String convertDayToTelegramResponse(@NotNull Integer day, @NotNull Collection<ScheduleResponse> scheduleResponseForDay) {
+		StringBuilder localizedDay = new StringBuilder(convertDayOfWeekLocalizedFormat(day) + "\n");
+		for (ScheduleResponse subject : scheduleResponseForDay) {
+			localizedDay
+					.append(subject.getTime())
+					.append("\n")
+					.append(subject.getSubjectAndTeacherName())
+					.append("\n")
+					.append(subject.getRoom())
+					.append("\n");
+		}
+		return localizedDay.toString();
 	}
 
 	private Multimap<Integer, ScheduleResponse> convertSheetToScheduleMap(@NotNull Sheet sheet) {
@@ -89,6 +110,32 @@ public class ScheduleServiceImpl implements ScheduleService {
 			}
 			case "СБ" -> {
 				return 6;
+			}
+			default -> {
+				return null;
+			}
+		}
+	}
+
+	private String convertDayOfWeekLocalizedFormat(@NotNull Integer day) {
+		switch (day) {
+			case 1 -> {
+				return "Понедельник";
+			}
+			case 2 -> {
+				return "Вторник";
+			}
+			case 3 -> {
+				return "Среда";
+			}
+			case 4 -> {
+				return "Четверг";
+			}
+			case 5 -> {
+				return "Пятница";
+			}
+			case 6 -> {
+				return "Суббота";
 			}
 			default -> {
 				return null;
