@@ -87,11 +87,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 			case "ПТ" -> {
 				return 5;
 			}
-			case "CБ" -> {
+			case "СБ" -> {
 				return 6;
 			}
 			default -> {
-				return 0;
+				return null;
 			}
 		}
 	}
