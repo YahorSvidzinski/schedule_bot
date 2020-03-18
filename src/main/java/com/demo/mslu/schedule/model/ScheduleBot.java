@@ -28,11 +28,12 @@ public class ScheduleBot extends TelegramLongPollingBot {
 	public void onUpdateReceived(Update update) {
 		Long chatId = botService.getChatId(update).orElseThrow();
 		String incomingMessage = botService.getIncomingMessage(update).orElseThrow();
-		ReplyKeyboardMarkup keyboard = botService.createKeyboardMarkup(incomingMessage);
+		ReplyKeyboardMarkup keyboard = botService.createKeyboard(incomingMessage);
 
 		SendMessage outgoingMessage = botService.createOutgoingMessage(chatId, incomingMessage);
 		outgoingMessage.setReplyMarkup(keyboard);
 		outgoingMessage.enableHtml(true);
+
 		sendMessage(outgoingMessage);
 	}
 

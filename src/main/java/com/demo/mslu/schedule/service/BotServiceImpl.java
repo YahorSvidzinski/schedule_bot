@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.BACK_BUTTON;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.CURRENT_WEEK_BUTTON;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.GET_SCHEDULE_BUTTON;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.NEXT_WEEK_BUTTON;
+import static java.util.Objects.nonNull;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -27,38 +29,50 @@ public class BotServiceImpl implements BotService {
     @Override
     public Optional<Long> getChatId(Update update) {
         Message message = update.getMessage();
-        Long chatId = message.getChatId();
+        Long chatId = nonNull(message) ? message.getChatId() : null;
         return Optional.of(chatId);
     }
 
     @Override
     public Optional<String> getIncomingMessage(Update update) {
         Message message = update.getMessage();
-        String messageText = message.getText();
+        String messageText = nonNull(message) ? message.getText() : null;
         return Optional.of(messageText);
     }
 
     @Override
     public SendMessage createOutgoingMessage(Long chatId, String incomingMessage) {
-        ScheduleRequest request = createScheduleRequest();
-        String message = scheduleService.getNextDay(request);
-        return new SendMessage(chatId, message);
+        switch (incomingMessage.toLowerCase()) {
+            case GET_SCHEDULE_BUTTON, BACK_BUTTON -> {
+                String message = "Выберите неделю";
+                return new SendMessage(chatId, message);
+            }
+            case CURRENT_WEEK_BUTTON, NEXT_WEEK_BUTTON -> {
+                String message = "Выберите день недели";
+                return new SendMessage(chatId, message);
+            }
+            default -> {
+                ScheduleRequest request = createScheduleRequest();
+                String message = scheduleService.getNextDay(request);
+                return new SendMessage(chatId, message);
+            }
+        }
     }
 
     @Override
-    public ReplyKeyboardMarkup createKeyboardMarkup(String incomingMessage) {
+    public ReplyKeyboardMarkup createKeyboard(String incomingMessage) {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        List<KeyboardRow> keyboardRow = createKeyboard(incomingMessage);
+        List<KeyboardRow> keyboardRow = createButtons(incomingMessage);
         keyboardMarkup.setKeyboard(keyboardRow);
         keyboardMarkup.setResizeKeyboard(true);
         return keyboardMarkup;
     }
 
-    private List<KeyboardRow> createKeyboard(String incomingMessage) {
+    private List<KeyboardRow> createButtons(String incomingMessage) {
         List<KeyboardRow> keyboard = new ArrayList<>();
 
         switch (incomingMessage.toLowerCase()) {
-            case GET_SCHEDULE_BUTTON -> {
+            case GET_SCHEDULE_BUTTON, BACK_BUTTON -> {
                 KeyboardRow currentWeekButton = new KeyboardRow();
                 KeyboardRow nextWeekButton = new KeyboardRow();
                 currentWeekButton.add("Текущая неделя");
