@@ -14,5 +14,5 @@ public interface BotService {
 
     SendMessage createOutgoingMessage(Long chatId, String incomingMessage);
 
-    ReplyKeyboardMarkup createKeyBoard();
+    ReplyKeyboardMarkup createKeyboardMarkup(String incomingMessage);
 }

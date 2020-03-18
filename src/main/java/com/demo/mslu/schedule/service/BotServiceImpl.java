@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.CURRENT_WEEK_BUTTON;
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.GET_SCHEDULE_BUTTON;
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.NEXT_WEEK_BUTTON;
+
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class BotServiceImpl implements BotService {
@@ -42,14 +46,43 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
-    public ReplyKeyboardMarkup createKeyBoard() {
+    public ReplyKeyboardMarkup createKeyboardMarkup(String incomingMessage) {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        KeyboardRow row = new KeyboardRow();
-        row.add("Get next day");
-        List<KeyboardRow> keyboard = new ArrayList<>(List.of(row));
-        keyboardMarkup.setKeyboard(keyboard);
+        List<KeyboardRow> keyboardRow = createKeyboard(incomingMessage);
+        keyboardMarkup.setKeyboard(keyboardRow);
         keyboardMarkup.setResizeKeyboard(true);
         return keyboardMarkup;
+    }
+
+    private List<KeyboardRow> createKeyboard(String incomingMessage) {
+        List<KeyboardRow> keyboard = new ArrayList<>();
+
+        switch (incomingMessage.toLowerCase()) {
+            case GET_SCHEDULE_BUTTON -> {
+                KeyboardRow currentWeekButton = new KeyboardRow();
+                KeyboardRow nextWeekButton = new KeyboardRow();
+                currentWeekButton.add("Текущая неделя");
+                nextWeekButton.add("Следующая неделя");
+                keyboard.addAll(List.of(currentWeekButton, nextWeekButton));
+                return keyboard;
+            }
+            case CURRENT_WEEK_BUTTON, NEXT_WEEK_BUTTON -> {
+                KeyboardRow allWeekButton = new KeyboardRow();
+                KeyboardRow daysButtons = new KeyboardRow();
+                KeyboardRow backButton = new KeyboardRow();
+                allWeekButton.add("Вся неделя");
+                daysButtons.addAll(List.of("ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"));
+                backButton.add("Назад");
+                keyboard.addAll(List.of(allWeekButton, daysButtons, backButton));
+                return keyboard;
+            }
+            default -> {
+                KeyboardRow getScheduleButton = new KeyboardRow();
+                getScheduleButton.add("Получить расписание");
+                keyboard.add(getScheduleButton);
+                return keyboard;
+            }
+        }
     }
 
     private ScheduleRequest createScheduleRequest() {
