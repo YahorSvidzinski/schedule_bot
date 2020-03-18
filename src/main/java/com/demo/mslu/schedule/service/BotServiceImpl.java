@@ -12,11 +12,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import javax.validation.constraints.NotNull;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.*;
+import static java.time.DayOfWeek.*;
 
 /**
  * @author Aliaksandr Miron
@@ -46,12 +48,12 @@ public class BotServiceImpl implements BotService {
 	@Override
 	public SendMessage createOutgoingMessage(@NotNull ScheduleRequest scheduleRequest, Long chatId, String incomingMessage) {
 		return switch (incomingMessage) {
-			case "ПН" -> new SendMessage(chatId, scheduleService.getDayOfWeek(scheduleRequest, 1));
-			case "ВТ" -> new SendMessage(chatId, scheduleService.getDayOfWeek(scheduleRequest, 2));
-			case "СР" -> new SendMessage(chatId, scheduleService.getDayOfWeek(scheduleRequest, 3));
-			case "ЧТ" -> new SendMessage(chatId, scheduleService.getDayOfWeek(scheduleRequest, 4));
-			case "ПТ" -> new SendMessage(chatId, scheduleService.getDayOfWeek(scheduleRequest, 5));
-			case "СБ" -> new SendMessage(chatId, scheduleService.getDayOfWeek(scheduleRequest, 6));
+			case "ПН" -> new SendMessage(chatId, scheduleService.getDayOfWeek(scheduleRequest, MONDAY));
+			case "ВТ" -> new SendMessage(chatId, scheduleService.getDayOfWeek(scheduleRequest, TUESDAY));
+			case "СР" -> new SendMessage(chatId, scheduleService.getDayOfWeek(scheduleRequest, WEDNESDAY));
+			case "ЧТ" -> new SendMessage(chatId, scheduleService.getDayOfWeek(scheduleRequest, THURSDAY));
+			case "ПТ" -> new SendMessage(chatId, scheduleService.getDayOfWeek(scheduleRequest, FRIDAY));
+			case "СБ" -> new SendMessage(chatId, scheduleService.getDayOfWeek(scheduleRequest, SATURDAY));
 			case "Вся неделя" -> new SendMessage(chatId, scheduleService.getWeek(scheduleRequest));
 			case "Получить расписание", "Назад" -> new SendMessage(chatId, "Выберите неделю");
 			case "Текущая неделя", "Следующая неделя" -> new SendMessage(chatId, "Выберите день недели");

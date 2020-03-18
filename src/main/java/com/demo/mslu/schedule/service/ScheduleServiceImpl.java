@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -23,6 +24,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+import static java.time.DayOfWeek.*;
 import static java.util.Objects.nonNull;
 import static java.util.Spliterator.ORDERED;
 import static java.util.Spliterators.spliteratorUnknownSize;
@@ -40,8 +42,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 	private final ScheduleRepository scheduleRepository;
 
 	@Override
-	public String getDayOfWeek(@NotNull ScheduleRequest scheduleRequest, @NotNull Integer dayOfWeek) {
-		if (dayOfWeek == 7) {
+	public String getDayOfWeek(@NotNull ScheduleRequest scheduleRequest, @NotNull DayOfWeek dayOfWeek) {
+		if (SUNDAY.equals(dayOfWeek)) {
 			return "Cегодня выходной";
 		}
 		scheduleRequest.setWeek(scheduleRequest.getWeek() + calculateWeek());
@@ -59,12 +61,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 		try {
 			HSSFSheet sheet = new HSSFWorkbook(reportInputStream).getSheetAt(0);
 			final Multimap<Integer, ScheduleResponse> objects = convertSheetToScheduleMap(sheet);
-			return convertDayToTelegramResponse(1, objects.get(1)) +
-					convertDayToTelegramResponse(2, objects.get(2)) +
-					convertDayToTelegramResponse(3, objects.get(3)) +
-					convertDayToTelegramResponse(4, objects.get(4)) +
-					convertDayToTelegramResponse(5, objects.get(5)) +
-					convertDayToTelegramResponse(6, objects.get(6));
+			return convertDayToTelegramResponse(MONDAY, objects.get(1)) +
+					convertDayToTelegramResponse(TUESDAY, objects.get(2)) +
+					convertDayToTelegramResponse(WEDNESDAY, objects.get(3)) +
+					convertDayToTelegramResponse(THURSDAY, objects.get(4)) +
+					convertDayToTelegramResponse(FRIDAY, objects.get(5)) +
+					convertDayToTelegramResponse(SATURDAY, objects.get(6));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -76,12 +78,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return Period.between(initialWeek, LocalDate.now(ZoneId.systemDefault())).getDays() / 7;
 	}
 
-	private String getConvertedDay(@NotNull ScheduleRequest scheduleRequest, int dayOfWeek) {
+	private String getConvertedDay(@NotNull ScheduleRequest scheduleRequest, DayOfWeek dayOfWeek) {
 		final InputStream reportInputStream = scheduleRequester.requestReport(scheduleRequest);
 		try {
 			HSSFSheet sheet = new HSSFWorkbook(reportInputStream).getSheetAt(0);
 			final Multimap<Integer, ScheduleResponse> objects = convertSheetToScheduleMap(sheet);
-			final Collection<ScheduleResponse> scheduleResponseForDay = objects.get(dayOfWeek);
+			final Collection<ScheduleResponse> scheduleResponseForDay = objects.get(dayOfWeek.getValue());
 			return convertDayToTelegramResponse(dayOfWeek, scheduleResponseForDay);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -89,7 +91,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return null;
 	}
 
-	private String convertDayToTelegramResponse(@NotNull Integer day, @NotNull Collection<ScheduleResponse> scheduleResponseForDay) {
+	private String convertDayToTelegramResponse(@NotNull DayOfWeek day, @NotNull Collection<ScheduleResponse> scheduleResponseForDay) {
 		StringBuilder localizedDay = new StringBuilder("<b>" + convertDayOfWeekLocalizedFormat(day) + "</b>" + "\n");
 		for (ScheduleResponse subject : scheduleResponseForDay) {
 			if (subject.getTime().isEmpty() && subject.getSubjectAndTeacherName().isEmpty() && subject.getRoom().isEmpty()) {
@@ -163,24 +165,24 @@ public class ScheduleServiceImpl implements ScheduleService {
 		}
 	}
 
-	private String convertDayOfWeekLocalizedFormat(@NotNull Integer day) {
+	private String convertDayOfWeekLocalizedFormat(@NotNull DayOfWeek day) {
 		switch (day) {
-			case 1 -> {
+			case MONDAY -> {
 				return "Понедельник";
 			}
-			case 2 -> {
+			case TUESDAY -> {
 				return "Вторник";
 			}
-			case 3 -> {
+			case WEDNESDAY -> {
 				return "Среда";
 			}
-			case 4 -> {
+			case THURSDAY -> {
 				return "Четверг";
 			}
-			case 5 -> {
+			case FRIDAY -> {
 				return "Пятница";
 			}
-			case 6 -> {
+			case SATURDAY -> {
 				return "Суббота";
 			}
 			default -> {
