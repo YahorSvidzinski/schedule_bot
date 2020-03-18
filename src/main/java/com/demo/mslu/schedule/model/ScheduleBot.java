@@ -30,7 +30,7 @@ public class ScheduleBot extends TelegramLongPollingBot {
 	public void onUpdateReceived(Update update) {
 		Long chatId = botService.getChatId(update).orElseThrow();
 		String incomingMessage = botService.getIncomingMessage(update).orElseThrow();
-		ReplyKeyboardMarkup keyboard = botService.createKeyboardMarkup(incomingMessage);
+		ReplyKeyboardMarkup keyboard = botService.createKeyboard(incomingMessage);
 		isNextWeek = incomingMessage.equals("Следующая неделя");
 		ScheduleRequest scheduleRequest = createScheduleRequest();
 		if (isNextWeek) {
