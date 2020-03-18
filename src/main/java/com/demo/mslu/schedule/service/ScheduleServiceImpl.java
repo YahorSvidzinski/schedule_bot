@@ -51,12 +51,20 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	public String getWeek(@NotNull ScheduleRequest scheduleRequest) {
 		scheduleRequest.setWeek(scheduleRequest.getWeek() + calculateWeek());
-		return getConvertedDay(scheduleRequest, 1) +
-				getConvertedDay(scheduleRequest, 2) +
-				getConvertedDay(scheduleRequest, 3) +
-				getConvertedDay(scheduleRequest, 4) +
-				getConvertedDay(scheduleRequest, 5) +
-				getConvertedDay(scheduleRequest, 6);
+		final InputStream reportInputStream = scheduleRequester.requestReport(scheduleRequest);
+		try {
+			HSSFSheet sheet = new HSSFWorkbook(reportInputStream).getSheetAt(0);
+			final Multimap<Integer, ScheduleResponse> objects = convertSheetToScheduleMap(sheet);
+			return convertDayToTelegramResponse(1, objects.get(1)) +
+					convertDayToTelegramResponse(2, objects.get(2)) +
+					convertDayToTelegramResponse(3, objects.get(3)) +
+					convertDayToTelegramResponse(4, objects.get(4)) +
+					convertDayToTelegramResponse(5, objects.get(5)) +
+					convertDayToTelegramResponse(6, objects.get(6));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	private Integer calculateWeek() {
