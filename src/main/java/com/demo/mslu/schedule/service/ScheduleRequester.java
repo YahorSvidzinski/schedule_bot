@@ -60,7 +60,7 @@ public class ScheduleRequester {
         HttpHeaders postHeaders = new HttpHeaders();
         postHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        HttpEntity<MultiValueMap<String, String>> entity = getHttpEntityWithDefaultValues(course, postHeaders, STUDY_WEEK_ZONE);
+        HttpEntity<MultiValueMap<String, String>> entity = getHttpEntityWithValuesMap(course, postHeaders, STUDY_WEEK_ZONE);
         final ResponseEntity<String> postResponse = new RestTemplate().postForEntity(
                 SCHEDULE_URL + "." + COURSE_CHANGE_FUNCTION,
                 entity,
@@ -90,14 +90,14 @@ public class ScheduleRequester {
         postHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         postHeaders.add(COOKIE, cookie);
 
-        HttpEntity<MultiValueMap<String, String>> httpEntity = getHttpEntityWithDefaultValues(entity, postHeaders, zoneType);
+        HttpEntity<MultiValueMap<String, String>> httpEntity = getHttpEntityWithValuesMap(entity, postHeaders, zoneType);
         new RestTemplate().postForEntity(
                 SCHEDULE_URL + "." + entityChangeFunction,
                 httpEntity,
                 String.class);
     }
 
-    private HttpEntity<MultiValueMap<String, String>> getHttpEntityWithDefaultValues(@NotNull Integer course, HttpHeaders postHeaders, ZoneType zoneType) {
+    private HttpEntity<MultiValueMap<String, String>> getHttpEntityWithValuesMap(@NotNull Integer course, HttpHeaders postHeaders, ZoneType zoneType) {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add(T_ZONE_ID, zoneType.getValue());
         map.add(T_FORM_ID, "printForm");

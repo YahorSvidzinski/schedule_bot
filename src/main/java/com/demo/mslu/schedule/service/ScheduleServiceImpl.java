@@ -24,6 +24,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.FRIDAY_BUTTON_VALUE;
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.MONDAY_BUTTON_VALUE;
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.SATURDAY_BUTTON_VALUE;
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.THURSDAY_BUTTON_VALUE;
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.TUESDAY_BUTTON_VALUE;
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.WEDNESDAY_BUTTON_VALUE;
 import static java.time.DayOfWeek.*;
 import static java.util.Objects.nonNull;
 import static java.util.Spliterator.ORDERED;
@@ -141,22 +147,22 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	private Integer convertDayOfWeekToNumber(@NotNull Cell cell) {
 		switch (cell.getStringCellValue()) {
-			case "ПН" -> {
+			case MONDAY_BUTTON_VALUE -> {
 				return 1;
 			}
-			case "ВТ" -> {
+			case TUESDAY_BUTTON_VALUE -> {
 				return 2;
 			}
-			case "СР" -> {
+			case WEDNESDAY_BUTTON_VALUE -> {
 				return 3;
 			}
-			case "ЧТ" -> {
+			case THURSDAY_BUTTON_VALUE -> {
 				return 4;
 			}
-			case "ПТ" -> {
+			case FRIDAY_BUTTON_VALUE -> {
 				return 5;
 			}
-			case "СБ" -> {
+			case SATURDAY_BUTTON_VALUE -> {
 				return 6;
 			}
 			default -> {

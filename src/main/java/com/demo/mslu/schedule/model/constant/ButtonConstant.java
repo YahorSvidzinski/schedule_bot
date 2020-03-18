@@ -10,15 +10,15 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class ButtonConstant {
 
-    public static final String GET_SCHEDULE_BUTTON = "получить расписание";
-    public static final String CURRENT_WEEK_BUTTON = "текущая неделя";
-    public static final String NEXT_WEEK_BUTTON = "следующая неделя";
-    public static final String BACK_BUTTON = "назад";
-    public static final String MONDAY_BUTTON = "пн";
-    public static final String TUESDAY_BUTTON = "вт";
-    public static final String WEDNESDAY_BUTTON = "ср";
-    public static final String THURSDAY_BUTTON = "чт";
-    public static final String FRIDAY_BUTTON = "пт";
-    public static final String SATURDAY_BUTTON = "сб";
-    public static final String ALL_WEEK_BUTTON = "вся неделя";
+    public static final String GET_SCHEDULE_BUTTON_VALUE = "Получить расписание";
+    public static final String CURRENT_WEEK_BUTTON_VALUE = "Текущая неделя";
+    public static final String NEXT_WEEK_BUTTON_VALUE = "Следующая неделя";
+    public static final String BACK_BUTTON_VALUE = "Назад";
+    public static final String MONDAY_BUTTON_VALUE = "ПН";
+    public static final String TUESDAY_BUTTON_VALUE = "ВТ";
+    public static final String WEDNESDAY_BUTTON_VALUE = "СР";
+    public static final String THURSDAY_BUTTON_VALUE = "ЧТ";
+    public static final String FRIDAY_BUTTON_VALUE = "ПТ";
+    public static final String SATURDAY_BUTTON_VALUE = "СБ";
+    public static final String ALL_WEEK_BUTTON_VALUE = "Вся неделя";
 }
