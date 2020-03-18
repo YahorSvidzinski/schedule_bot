@@ -27,6 +27,9 @@ import static com.demo.mslu.schedule.model.constant.ButtonConstant.THURSDAY_BUTT
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.TUESDAY_BUTTON;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.WEDNESDAY_BUTTON;
 
+/**
+ * @author Aliaksandr Miron
+ */
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class BotServiceImpl implements BotService {
