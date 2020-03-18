@@ -16,5 +16,5 @@ public interface BotService {
 
 	SendMessage createOutgoingMessage(@NotNull ScheduleRequest scheduleRequest, Long chatId, String incomingMessage);
 
-	ReplyKeyboardMarkup createKeyboardMarkup(String incomingMessage);
+	ReplyKeyboardMarkup createKeyboard(String incomingMessage);
 }
