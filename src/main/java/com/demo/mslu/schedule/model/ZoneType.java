@@ -3,6 +3,9 @@ package com.demo.mslu.schedule.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * @author Timofei Shostko
+ */
 @AllArgsConstructor
 @Getter
 public enum ZoneType {
