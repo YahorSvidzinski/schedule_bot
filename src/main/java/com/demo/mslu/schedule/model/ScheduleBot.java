@@ -24,18 +24,21 @@ public class ScheduleBot extends TelegramLongPollingBot {
 
 	private final BotService botService;
 
-	private boolean isNextWeek;
+	private ScheduleRequest scheduleRequest = createScheduleRequest();
+
+	private Integer startWeek = scheduleRequest.getWeek();
 
 	@Override
 	public void onUpdateReceived(Update update) {
 		Long chatId = botService.getChatId(update).orElseThrow();
 		String incomingMessage = botService.getIncomingMessage(update).orElseThrow();
 		ReplyKeyboardMarkup keyboard = botService.createKeyboard(incomingMessage);
-		isNextWeek = incomingMessage.equals("Следующая неделя");
-		ScheduleRequest scheduleRequest = createScheduleRequest();
-		if (isNextWeek) {
+		if (incomingMessage.equals("Следующая неделя") && scheduleRequest.getWeek().equals(startWeek)) {
 			scheduleRequest.setWeek(scheduleRequest.getWeek() + 1);
+		} else if (incomingMessage.equals("Текущая неделя")) {
+			scheduleRequest.setWeek(startWeek);
 		}
+
 		SendMessage outgoingMessage = botService.createOutgoingMessage(scheduleRequest, chatId, incomingMessage);
 		outgoingMessage.setReplyMarkup(keyboard);
 		outgoingMessage.enableHtml(true);
