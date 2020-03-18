@@ -17,8 +17,16 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import static com.demo.mslu.schedule.model.ZoneType.*;
-import static com.demo.mslu.schedule.util.ScheduleConstants.*;
+import static com.demo.mslu.schedule.model.ZoneType.BUTTON_ZONE;
+import static com.demo.mslu.schedule.model.ZoneType.STUDY_GROUP_ZONE;
+import static com.demo.mslu.schedule.model.ZoneType.STUDY_WEEK_ZONE;
+import static com.demo.mslu.schedule.util.ScheduleConstants.COURSE_CHANGE_FUNCTION;
+import static com.demo.mslu.schedule.util.ScheduleConstants.FACULTY_CHANGE_FUNCTION;
+import static com.demo.mslu.schedule.util.ScheduleConstants.GROUP_CHANGE_FUNCTION;
+import static com.demo.mslu.schedule.util.ScheduleConstants.PRINT_REPORT_FUNCTION;
+import static com.demo.mslu.schedule.util.ScheduleConstants.SCHEDULE_URL;
+import static com.demo.mslu.schedule.util.ScheduleConstants.WEEK_CHANGE_FUNCTION;
+import static com.demo.mslu.schedule.util.ScheduleConstants.YEAR_CHANGE_FUNCTION;
 import static org.springframework.http.HttpHeaders.COOKIE;
 import static org.springframework.http.HttpMethod.GET;
 

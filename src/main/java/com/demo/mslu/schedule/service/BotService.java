@@ -13,11 +13,11 @@ import java.util.Optional;
  */
 public interface BotService {
 
-	Optional<Long> getChatId(Update update);
+    Optional<Long> getChatId(Update update);
 
-	Optional<String> getIncomingMessage(Update update);
+    Optional<String> getIncomingMessage(Update update);
 
-	SendMessage createOutgoingMessage(@NotNull ScheduleRequest scheduleRequest, Long chatId, String incomingMessage);
+    SendMessage createOutgoingMessage(@NotNull ScheduleRequest scheduleRequest, Long chatId, String incomingMessage);
 
-	ReplyKeyboardMarkup createKeyboard(String incomingMessage);
+    ReplyKeyboardMarkup createKeyboard(String incomingMessage);
 }

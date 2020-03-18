@@ -10,7 +10,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class ScheduleResponse {
 
-	private String time;
-	private String subjectAndTeacherName;
-	private String room;
+    private String time;
+    private String subjectAndTeacherName;
+    private String room;
 }
