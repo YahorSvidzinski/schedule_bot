@@ -24,13 +24,19 @@ public class ScheduleBot extends TelegramLongPollingBot {
 
 	private final BotService botService;
 
+	private boolean isNextWeek;
+
 	@Override
 	public void onUpdateReceived(Update update) {
 		Long chatId = botService.getChatId(update).orElseThrow();
 		String incomingMessage = botService.getIncomingMessage(update).orElseThrow();
 		ReplyKeyboardMarkup keyboard = botService.createKeyboardMarkup(incomingMessage);
-
-		SendMessage outgoingMessage = botService.createOutgoingMessage(chatId, incomingMessage);
+		isNextWeek = incomingMessage.equals("Следующая неделя");
+		ScheduleRequest scheduleRequest = createScheduleRequest();
+		if (isNextWeek) {
+			scheduleRequest.setWeek(scheduleRequest.getWeek() + 1);
+		}
+		SendMessage outgoingMessage = botService.createOutgoingMessage(scheduleRequest, chatId, incomingMessage);
 		outgoingMessage.setReplyMarkup(keyboard);
 		outgoingMessage.enableHtml(true);
 		sendMessage(outgoingMessage);
@@ -53,5 +59,15 @@ public class ScheduleBot extends TelegramLongPollingBot {
 			String errorMessage = e.getMessage();
 			log.error(errorMessage);
 		}
+	}
+
+	private ScheduleRequest createScheduleRequest() {
+		return ScheduleRequest.builder()
+				.course(3)
+				.faculty(7)
+				.year(2019)
+				.group(1360)
+				.week(497)
+				.build();
 	}
 }

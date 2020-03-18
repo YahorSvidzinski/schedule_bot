@@ -1,0 +1,9 @@
+applications:
+  - name: chatbot4
+    memory: 1024M
+    random-route: true
+    path: target/schedule-0.0.1-SNAPSHOT.jar
+    health-check-type: http
+    health-check-http-endpoint: /actuator/health
+    timeout: 60
+    buildpack: https://github.com/cloudfoundry/java-buildpack.git

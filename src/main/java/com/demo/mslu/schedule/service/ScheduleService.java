@@ -9,5 +9,7 @@ import javax.validation.constraints.NotNull;
  */
 public interface ScheduleService {
 
-	String getNextDay(@NotNull ScheduleRequest scheduleRequest);
+	String getDayOfWeek(@NotNull ScheduleRequest scheduleRequest, @NotNull Integer dayOfWeek);
+
+	String getWeek(@NotNull ScheduleRequest scheduleRequest);
 }

@@ -16,10 +16,13 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+import static java.util.Objects.nonNull;
 import static java.util.Spliterator.ORDERED;
 import static java.util.Spliterators.spliteratorUnknownSize;
 import static java.util.stream.Collectors.joining;
@@ -35,12 +38,33 @@ public class ScheduleServiceImpl implements ScheduleService {
 	private ScheduleRequester scheduleRequester;
 
 	@Override
-	public String getNextDay(@NotNull ScheduleRequest scheduleRequest) {
-		int dayOfWeek = LocalDate.now().plusDays(1).getDayOfWeek().getValue();
-		if (dayOfWeek == 6) {
-			scheduleRequest.setWeek(scheduleRequest.getWeek() + 1);
-			dayOfWeek = 1;
+	public String getDayOfWeek(@NotNull ScheduleRequest scheduleRequest, @NotNull Integer dayOfWeek) {
+		if (dayOfWeek == 7) {
+			return "Cегодня выходной";
 		}
+		scheduleRequest.setWeek(scheduleRequest.getWeek() + calculateWeek());
+		final String scheduleResponseForDay = getConvertedDay(scheduleRequest, dayOfWeek);
+		if (nonNull(scheduleResponseForDay)) return scheduleResponseForDay;
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public String getWeek(@NotNull ScheduleRequest scheduleRequest) {
+		scheduleRequest.setWeek(scheduleRequest.getWeek() + calculateWeek());
+		return getConvertedDay(scheduleRequest, 1) +
+				getConvertedDay(scheduleRequest, 2) +
+				getConvertedDay(scheduleRequest, 3) +
+				getConvertedDay(scheduleRequest, 4) +
+				getConvertedDay(scheduleRequest, 5) +
+				getConvertedDay(scheduleRequest, 6);
+	}
+
+	private Integer calculateWeek() {
+		final LocalDate initialWeek = LocalDate.of(2020, 3, 16);
+		return Period.between(initialWeek, LocalDate.now(ZoneId.systemDefault())).getDays() / 7;
+	}
+
+	private String getConvertedDay(@NotNull ScheduleRequest scheduleRequest, int dayOfWeek) {
 		final InputStream reportInputStream = scheduleRequester.requestReport(scheduleRequest);
 		try {
 			HSSFSheet sheet = new HSSFWorkbook(reportInputStream).getSheetAt(0);
@@ -50,12 +74,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		throw new IllegalStateException();
+		return null;
 	}
 
 	private String convertDayToTelegramResponse(@NotNull Integer day, @NotNull Collection<ScheduleResponse> scheduleResponseForDay) {
 		StringBuilder localizedDay = new StringBuilder("<b>" + convertDayOfWeekLocalizedFormat(day) + "</b>" + "\n");
 		for (ScheduleResponse subject : scheduleResponseForDay) {
+			if (subject.getTime().isEmpty() && subject.getSubjectAndTeacherName().isEmpty() && subject.getRoom().isEmpty()) {
+				return localizedDay
+						.append("Выходной")
+						.append("\n")
+						.append("\n")
+						.toString();
+			}
 			localizedDay
 					.append("<i>")
 					.append(subject.getTime())
