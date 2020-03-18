@@ -14,6 +14,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import static com.demo.mslu.schedule.model.constant.BotConstant.BOT_NAME;
 
+/**
+ * @author Aliaksandr Miron
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)

@@ -8,6 +8,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
+/**
+ * @author Aliaksandr Miron
+ */
 public interface BotService {
 
 	Optional<Long> getChatId(Update update);

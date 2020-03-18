@@ -2,6 +2,7 @@ package com.demo.mslu.schedule.service;
 
 import com.demo.mslu.schedule.model.ScheduleRequest;
 import com.demo.mslu.schedule.model.ScheduleResponse;
+import com.demo.mslu.schedule.repository.ScheduleRepository;
 import com.demo.mslu.schedule.util.MultimapCollector;
 import com.google.common.collect.Multimap;
 import lombok.AllArgsConstructor;
@@ -35,7 +36,8 @@ import static java.util.stream.StreamSupport.stream;
 @AllArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
 
-	private ScheduleRequester scheduleRequester;
+	private final ScheduleRequester scheduleRequester;
+	private final ScheduleRepository scheduleRepository;
 
 	@Override
 	public String getDayOfWeek(@NotNull ScheduleRequest scheduleRequest, @NotNull Integer dayOfWeek) {
@@ -44,7 +46,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 		}
 		scheduleRequest.setWeek(scheduleRequest.getWeek() + calculateWeek());
 		final String scheduleResponseForDay = getConvertedDay(scheduleRequest, dayOfWeek);
-		if (nonNull(scheduleResponseForDay)) return scheduleResponseForDay;
+		if (nonNull(scheduleResponseForDay)) {
+			return scheduleResponseForDay;
+		}
 		throw new IllegalStateException();
 	}
 

@@ -18,6 +18,9 @@ import java.util.Optional;
 
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.*;
 
+/**
+ * @author Aliaksandr Miron
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor(onConstructor_ = @Autowired)

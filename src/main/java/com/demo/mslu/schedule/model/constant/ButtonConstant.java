@@ -4,6 +4,9 @@ import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;
 
+/**
+ * @author Aliaksandr Miron
+ */
 @NoArgsConstructor(access = PRIVATE)
 public class ButtonConstant {
 
