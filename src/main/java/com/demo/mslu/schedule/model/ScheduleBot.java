@@ -13,6 +13,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import static com.demo.mslu.schedule.model.constant.BotConstant.BOT_NAME;
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.CURRENT_WEEK_BUTTON_VALUE;
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.NEXT_WEEK_BUTTON_VALUE;
 
 /**
  * @author Aliaksandr Miron
@@ -36,9 +38,10 @@ public class ScheduleBot extends TelegramLongPollingBot {
         Long chatId = botService.getChatId(update).orElseThrow();
         String incomingMessage = botService.getIncomingMessage(update).orElseThrow();
         ReplyKeyboardMarkup keyboard = botService.createKeyboard(incomingMessage);
-        if (incomingMessage.equals("Следующая неделя") && scheduleRequest.getWeek().equals(startWeek)) {
-            scheduleRequest.setWeek(scheduleRequest.getWeek() + 1);
-        } else if (incomingMessage.equals("Текущая неделя")) {
+        if (NEXT_WEEK_BUTTON_VALUE.equals(incomingMessage) &&
+                startWeek.equals(scheduleRequest.getWeek())) {
+            scheduleRequest.setWeek(getNextWeek());
+        } else if (CURRENT_WEEK_BUTTON_VALUE.equals(incomingMessage)) {
             scheduleRequest.setWeek(startWeek);
         }
 
@@ -46,6 +49,10 @@ public class ScheduleBot extends TelegramLongPollingBot {
         outgoingMessage.setReplyMarkup(keyboard);
         outgoingMessage.enableHtml(true);
         sendMessage(outgoingMessage);
+    }
+
+    private int getNextWeek() {
+        return scheduleRequest.getWeek() + 1;
     }
 
     @Override

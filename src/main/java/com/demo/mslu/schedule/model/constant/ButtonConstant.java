@@ -2,6 +2,8 @@ package com.demo.mslu.schedule.model.constant;
 
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -21,4 +23,13 @@ public class ButtonConstant {
     public static final String FRIDAY_BUTTON_VALUE = "ПТ";
     public static final String SATURDAY_BUTTON_VALUE = "СБ";
     public static final String ALL_WEEK_BUTTON_VALUE = "Вся неделя";
+
+    public static List<String> getAllWeekStudyDays(){
+        return List.of(MONDAY_BUTTON_VALUE,
+                TUESDAY_BUTTON_VALUE,
+                WEDNESDAY_BUTTON_VALUE,
+                THURSDAY_BUTTON_VALUE,
+                FRIDAY_BUTTON_VALUE,
+                SATURDAY_BUTTON_VALUE);
+    }
 }

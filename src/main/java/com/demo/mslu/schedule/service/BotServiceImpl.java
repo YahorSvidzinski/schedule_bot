@@ -27,6 +27,11 @@ import static com.demo.mslu.schedule.model.constant.ButtonConstant.SATURDAY_BUTT
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.THURSDAY_BUTTON_VALUE;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.TUESDAY_BUTTON_VALUE;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.WEDNESDAY_BUTTON_VALUE;
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.getAllWeekStudyDays;
+import static com.demo.mslu.schedule.model.constant.MessageConstant.CHOOSE_WEEK_DAY_MESSAGE;
+import static com.demo.mslu.schedule.model.constant.MessageConstant.CHOOSE_WEEK_MESSAGE;
+import static com.demo.mslu.schedule.model.constant.MessageConstant.WRONG_COMMAND_MESSAGE;
+import static com.demo.mslu.schedule.util.KeyboardUtils.newKeyboardRow;
 import static java.time.DayOfWeek.FRIDAY;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SATURDAY;
@@ -70,10 +75,10 @@ public class BotServiceImpl implements BotService {
             case SATURDAY_BUTTON_VALUE -> new SendMessage(chatId, scheduleService.getDayOfWeek(scheduleRequest, SATURDAY));
             case ALL_WEEK_BUTTON_VALUE -> new SendMessage(chatId, scheduleService.getWeek(scheduleRequest));
             case GET_SCHEDULE_BUTTON_VALUE,
-                    BACK_BUTTON_VALUE -> new SendMessage(chatId, "Выберите неделю");
+                    BACK_BUTTON_VALUE -> new SendMessage(chatId, CHOOSE_WEEK_MESSAGE);
             case CURRENT_WEEK_BUTTON_VALUE,
-                    NEXT_WEEK_BUTTON_VALUE -> new SendMessage(chatId, "Выберите день недели");
-            default -> new SendMessage(chatId, "Неверная команда");
+                    NEXT_WEEK_BUTTON_VALUE -> new SendMessage(chatId, CHOOSE_WEEK_DAY_MESSAGE);
+            default -> new SendMessage(chatId, WRONG_COMMAND_MESSAGE);
         };
     }
 
@@ -92,10 +97,8 @@ public class BotServiceImpl implements BotService {
         switch (buttonValue) {
             case GET_SCHEDULE_BUTTON_VALUE,
                     BACK_BUTTON_VALUE -> {
-                KeyboardRow currentWeekButton = new KeyboardRow();
-                KeyboardRow nextWeekButton = new KeyboardRow();
-                currentWeekButton.add(CURRENT_WEEK_BUTTON_VALUE);
-                nextWeekButton.add(NEXT_WEEK_BUTTON_VALUE);
+                KeyboardRow currentWeekButton = newKeyboardRow(CURRENT_WEEK_BUTTON_VALUE);
+                KeyboardRow nextWeekButton = newKeyboardRow(NEXT_WEEK_BUTTON_VALUE);
                 keyboard.addAll(List.of(currentWeekButton, nextWeekButton));
                 return keyboard;
             }
@@ -108,19 +111,14 @@ public class BotServiceImpl implements BotService {
                     FRIDAY_BUTTON_VALUE,
                     SATURDAY_BUTTON_VALUE,
                     ALL_WEEK_BUTTON_VALUE -> {
-                KeyboardRow allWeekButton = new KeyboardRow();
-                KeyboardRow daysButtons = new KeyboardRow();
-                KeyboardRow backButton = new KeyboardRow();
-                allWeekButton.add(ALL_WEEK_BUTTON_VALUE);
-                daysButtons.addAll(List.of(MONDAY_BUTTON_VALUE, TUESDAY_BUTTON_VALUE, WEDNESDAY_BUTTON_VALUE,
-                        THURSDAY_BUTTON_VALUE, FRIDAY_BUTTON_VALUE, SATURDAY_BUTTON_VALUE));
-                backButton.add(BACK_BUTTON_VALUE);
+                KeyboardRow allWeekButton = newKeyboardRow(ALL_WEEK_BUTTON_VALUE);
+                KeyboardRow daysButtons = newKeyboardRow(getAllWeekStudyDays());
+                KeyboardRow backButton = newKeyboardRow(BACK_BUTTON_VALUE);
                 keyboard.addAll(List.of(allWeekButton, daysButtons, backButton));
                 return keyboard;
             }
             default -> {
-                KeyboardRow getScheduleButton = new KeyboardRow();
-                getScheduleButton.add(GET_SCHEDULE_BUTTON_VALUE);
+                KeyboardRow getScheduleButton = newKeyboardRow(GET_SCHEDULE_BUTTON_VALUE);
                 keyboard.add(getScheduleButton);
                 return keyboard;
             }
