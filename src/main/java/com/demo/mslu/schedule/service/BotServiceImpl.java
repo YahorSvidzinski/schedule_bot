@@ -27,7 +27,7 @@ import static com.demo.mslu.schedule.model.constant.ButtonConstant.SATURDAY_BUTT
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.THURSDAY_BUTTON_VALUE;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.TUESDAY_BUTTON_VALUE;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.WEDNESDAY_BUTTON_VALUE;
-import static com.demo.mslu.schedule.model.constant.ButtonConstant.getAllWeekStudyDays;
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.getAllStudyWeekDays;
 import static com.demo.mslu.schedule.model.constant.MessageConstant.CHOOSE_WEEK_DAY_MESSAGE;
 import static com.demo.mslu.schedule.model.constant.MessageConstant.CHOOSE_WEEK_MESSAGE;
 import static com.demo.mslu.schedule.model.constant.MessageConstant.WRONG_COMMAND_MESSAGE;
@@ -112,7 +112,7 @@ public class BotServiceImpl implements BotService {
                     SATURDAY_BUTTON_VALUE,
                     ALL_WEEK_BUTTON_VALUE -> {
                 KeyboardRow allWeekButton = newKeyboardRow(ALL_WEEK_BUTTON_VALUE);
-                KeyboardRow daysButtons = newKeyboardRow(getAllWeekStudyDays());
+                KeyboardRow daysButtons = newKeyboardRow(getAllStudyWeekDays());
                 KeyboardRow backButton = newKeyboardRow(BACK_BUTTON_VALUE);
                 keyboard.addAll(List.of(allWeekButton, daysButtons, backButton));
                 return keyboard;

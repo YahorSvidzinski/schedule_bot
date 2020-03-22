@@ -24,7 +24,7 @@ public class ButtonConstant {
     public static final String SATURDAY_BUTTON_VALUE = "СБ";
     public static final String ALL_WEEK_BUTTON_VALUE = "Вся неделя";
 
-    public static List<String> getAllWeekStudyDays(){
+    public static List<String> getAllStudyWeekDays(){
         return List.of(MONDAY_BUTTON_VALUE,
                 TUESDAY_BUTTON_VALUE,
                 WEDNESDAY_BUTTON_VALUE,

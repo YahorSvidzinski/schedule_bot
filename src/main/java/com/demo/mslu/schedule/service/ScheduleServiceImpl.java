@@ -30,6 +30,19 @@ import static com.demo.mslu.schedule.model.constant.ButtonConstant.SATURDAY_BUTT
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.THURSDAY_BUTTON_VALUE;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.TUESDAY_BUTTON_VALUE;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.WEDNESDAY_BUTTON_VALUE;
+import static com.demo.mslu.schedule.model.constant.MessageConstant.TODAY_IS_A_DAY_OFF_MESSAGE;
+import static com.demo.mslu.schedule.model.constant.WeekDaysConstant.LocalizedFormat.LOCALIZED_FRIDAY;
+import static com.demo.mslu.schedule.model.constant.WeekDaysConstant.LocalizedFormat.LOCALIZED_MONDAY;
+import static com.demo.mslu.schedule.model.constant.WeekDaysConstant.LocalizedFormat.LOCALIZED_SATURDAY;
+import static com.demo.mslu.schedule.model.constant.WeekDaysConstant.LocalizedFormat.LOCALIZED_THURSDAY;
+import static com.demo.mslu.schedule.model.constant.WeekDaysConstant.LocalizedFormat.LOCALIZED_TUESDAY;
+import static com.demo.mslu.schedule.model.constant.WeekDaysConstant.LocalizedFormat.LOCALIZED_WEDNESDAY;
+import static com.demo.mslu.schedule.model.constant.WeekDaysConstant.NumericFormat.NUMBER_FRIDAY;
+import static com.demo.mslu.schedule.model.constant.WeekDaysConstant.NumericFormat.NUMBER_MONDAY;
+import static com.demo.mslu.schedule.model.constant.WeekDaysConstant.NumericFormat.NUMBER_SATURDAY;
+import static com.demo.mslu.schedule.model.constant.WeekDaysConstant.NumericFormat.NUMBER_THURSDAY;
+import static com.demo.mslu.schedule.model.constant.WeekDaysConstant.NumericFormat.NUMBER_TUESDAY;
+import static com.demo.mslu.schedule.model.constant.WeekDaysConstant.NumericFormat.NUMBER_WEDNESDAY;
 import static java.time.DayOfWeek.FRIDAY;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SATURDAY;
@@ -56,7 +69,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public String getDayOfWeek(@NotNull ScheduleRequest scheduleRequest, @NotNull DayOfWeek dayOfWeek) {
         if (SUNDAY.equals(dayOfWeek)) {
-            return "Cегодня выходной";
+            return TODAY_IS_A_DAY_OFF_MESSAGE;
         }
         scheduleRequest.setWeek(scheduleRequest.getWeek() + calculateWeek());
         final String scheduleResponseForDay = getConvertedDay(scheduleRequest, dayOfWeek);
@@ -154,22 +167,22 @@ public class ScheduleServiceImpl implements ScheduleService {
     private Integer convertDayOfWeekToNumber(@NotNull Cell cell) {
         switch (cell.getStringCellValue()) {
             case MONDAY_BUTTON_VALUE -> {
-                return 1;
+                return NUMBER_MONDAY;
             }
             case TUESDAY_BUTTON_VALUE -> {
-                return 2;
+                return NUMBER_TUESDAY;
             }
             case WEDNESDAY_BUTTON_VALUE -> {
-                return 3;
+                return NUMBER_WEDNESDAY;
             }
             case THURSDAY_BUTTON_VALUE -> {
-                return 4;
+                return NUMBER_THURSDAY;
             }
             case FRIDAY_BUTTON_VALUE -> {
-                return 5;
+                return NUMBER_FRIDAY;
             }
             case SATURDAY_BUTTON_VALUE -> {
-                return 6;
+                return NUMBER_SATURDAY;
             }
             default -> {
                 return null;
@@ -180,22 +193,22 @@ public class ScheduleServiceImpl implements ScheduleService {
     private String convertDayOfWeekLocalizedFormat(@NotNull DayOfWeek day) {
         switch (day) {
             case MONDAY -> {
-                return "Понедельник";
+                return LOCALIZED_MONDAY;
             }
             case TUESDAY -> {
-                return "Вторник";
+                return LOCALIZED_TUESDAY;
             }
             case WEDNESDAY -> {
-                return "Среда";
+                return LOCALIZED_WEDNESDAY;
             }
             case THURSDAY -> {
-                return "Четверг";
+                return LOCALIZED_THURSDAY;
             }
             case FRIDAY -> {
-                return "Пятница";
+                return LOCALIZED_FRIDAY;
             }
             case SATURDAY -> {
-                return "Суббота";
+                return LOCALIZED_SATURDAY;
             }
             default -> {
                 return null;
