@@ -12,9 +12,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class ScheduleRequest {
 
-	private Integer course;
-	private Integer faculty;
-	private Integer year;
-	private Integer group;
-	private Integer week;
+    private Integer course;
+    private Integer faculty;
+    private Integer year;
+    private Integer group;
+    private Integer week;
 }
