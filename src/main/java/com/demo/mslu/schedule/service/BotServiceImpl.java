@@ -2,7 +2,6 @@ package com.demo.mslu.schedule.service;
 
 import com.demo.mslu.schedule.model.ScheduleRequest;
 import com.demo.mslu.schedule.model.constant.Week;
-import com.demo.mslu.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,6 @@ import static com.demo.mslu.schedule.model.constant.ButtonConstant.WEDNESDAY_BUT
 public class BotServiceImpl implements BotService {
 
     private final ScheduleService scheduleService;
-    private final ScheduleRepository scheduleRepository;
 
     @Override
     public Optional<Long> getChatId(Update update) {

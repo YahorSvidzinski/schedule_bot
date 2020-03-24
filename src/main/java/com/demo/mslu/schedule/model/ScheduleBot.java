@@ -13,6 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.BACK_BUTTON;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.CURRENT_WEEK_BUTTON;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.NEXT_WEEK_BUTTON;
 import static com.demo.mslu.schedule.model.constant.Week.CURRENT_WEEK;
@@ -65,13 +66,14 @@ public class ScheduleBot extends TelegramLongPollingBot {
     }
 
     private void synchronizeWeek(String incomingMessage) {
-        Integer weekNumber = scheduleRequest.getWeek();
-        if (NEXT_WEEK_BUTTON.equals(incomingMessage) && weekNumber.equals(startWeek)) {
-            scheduleRequest.setWeek(weekNumber + 1);
+        if (NEXT_WEEK_BUTTON.equals(incomingMessage)) {
+            scheduleRequest.setWeek(startWeek + 1);
             this.week = NEXT_WEEK;
         } else if (CURRENT_WEEK_BUTTON.equals(incomingMessage)) {
             scheduleRequest.setWeek(startWeek);
             this.week = CURRENT_WEEK;
+        } else if (BACK_BUTTON.equals(incomingMessage)) {
+            scheduleRequest.setWeek(startWeek);
         }
     }
 
