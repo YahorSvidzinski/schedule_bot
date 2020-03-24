@@ -25,6 +25,7 @@ import static com.demo.mslu.schedule.model.constant.ButtonConstant.GET_SCHEDULE_
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.MONDAY_BUTTON;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.NEXT_WEEK_BUTTON;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.SATURDAY_BUTTON;
+import static com.demo.mslu.schedule.model.constant.ButtonConstant.START_BUTTON;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.THURSDAY_BUTTON;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.TUESDAY_BUTTON;
 import static com.demo.mslu.schedule.model.constant.ButtonConstant.WEDNESDAY_BUTTON;
@@ -85,7 +86,7 @@ public class BotServiceImpl implements BotService {
                 String weekSchedule = scheduleService.getForWeek(scheduleRequest, week);
                 return new SendMessage(chatId, weekSchedule);
 
-            case GET_SCHEDULE_BUTTON, BACK_BUTTON:
+            case GET_SCHEDULE_BUTTON, BACK_BUTTON, START_BUTTON:
                 return new SendMessage(chatId, "Выберите неделю");
 
             case CURRENT_WEEK_BUTTON, NEXT_WEEK_BUTTON:
