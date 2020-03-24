@@ -1,6 +1,7 @@
 package com.demo.mslu.schedule.service;
 
 import com.demo.mslu.schedule.model.ScheduleRequest;
+import com.demo.mslu.schedule.model.constant.Week;
 
 import javax.validation.constraints.NotNull;
 
@@ -9,7 +10,7 @@ import javax.validation.constraints.NotNull;
  */
 public interface ScheduleService {
 
-	String getDayOfWeek(@NotNull ScheduleRequest scheduleRequest, @NotNull Integer dayOfWeek);
+	String getForDay(@NotNull ScheduleRequest scheduleRequest, @NotNull Integer dayOfWeek, Week week);
 
-	String getWeek(@NotNull ScheduleRequest scheduleRequest);
+	String getForWeek(@NotNull ScheduleRequest scheduleRequest, Week week);
 }

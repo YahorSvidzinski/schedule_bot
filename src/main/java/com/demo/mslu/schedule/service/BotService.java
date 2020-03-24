@@ -1,6 +1,8 @@
 package com.demo.mslu.schedule.service;
 
 import com.demo.mslu.schedule.model.ScheduleRequest;
+import com.demo.mslu.schedule.model.constant.ButtonConstant;
+import com.demo.mslu.schedule.model.constant.Week;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -17,7 +19,7 @@ public interface BotService {
 
 	Optional<String> getIncomingMessage(Update update);
 
-	SendMessage createOutgoingMessage(@NotNull ScheduleRequest scheduleRequest, Long chatId, String incomingMessage);
+	SendMessage createOutgoingMessage(@NotNull ScheduleRequest scheduleRequest, Long chatId, String incomingMessage, Week week);
 
-	ReplyKeyboardMarkup createKeyboard(String incomingMessage);
+	ReplyKeyboardMarkup createKeyboardMarkup(String incomingMessage);
 }

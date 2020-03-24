@@ -129,4 +129,23 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <currentProfileProperty>local</currentProfileProperty>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>cloud</id>
+            <properties>
+                <currentProfileProperty>cloud</currentProfileProperty>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>

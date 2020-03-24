@@ -8,10 +8,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import static javax.persistence.EnumType.STRING;
 import static javax.persistence.GenerationType.IDENTITY;
 
 /**
@@ -31,8 +33,24 @@ public class Schedule {
     private Long id;
 
     @Column
+    @Enumerated(STRING)
     private Week week;
 
-    @Column
-    private String body;
+    @Column(length = 1000)
+    private String monday;
+
+    @Column(length = 1000)
+    private String tuesday;
+
+    @Column(length = 1000)
+    private String wednesday;
+
+    @Column(length = 1000)
+    private String thursday;
+
+    @Column(length = 1000)
+    private String friday;
+
+    @Column(length = 1000)
+    private String saturday;
 }
