@@ -1,5 +1,6 @@
 package com.demo.mslu.schedule.model;
 
+import com.demo.mslu.schedule.exception.ScheduleNotAvailableException;
 import com.demo.mslu.schedule.model.constant.Week;
 import com.demo.mslu.schedule.service.BotService;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,15 @@ public class ScheduleBot extends TelegramLongPollingBot {
 
         synchronizeWeek(incomingMessage);
 
-        SendMessage outgoingMessage = botService.createOutgoingMessage(scheduleRequest, chatId, incomingMessage, week);
+        SendMessage outgoingMessage = new SendMessage(chatId, "");
+        try {
+            outgoingMessage = botService.createOutgoingMessage(scheduleRequest, chatId, incomingMessage, week);
+        } catch (ScheduleNotAvailableException e) {
+            String message = e.getMessage();
+            outgoingMessage.setText(message);
+            log.error(message);
+        }
+
         outgoingMessage.setReplyMarkup(keyboard);
         outgoingMessage.enableHtml(true);
         sendMessage(outgoingMessage);

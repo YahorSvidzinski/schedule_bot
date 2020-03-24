@@ -1,5 +1,6 @@
 package com.demo.mslu.schedule.service;
 
+import com.demo.mslu.schedule.exception.ScheduleNotAvailableException;
 import com.demo.mslu.schedule.model.ScheduleRequest;
 import com.demo.mslu.schedule.model.constant.Week;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +57,7 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
-    public SendMessage createOutgoingMessage(@NotNull ScheduleRequest scheduleRequest, Long chatId, String incomingMessage, Week week) {
+    public SendMessage createOutgoingMessage(@NotNull ScheduleRequest scheduleRequest, Long chatId, String incomingMessage, Week week) throws ScheduleNotAvailableException {
         switch (incomingMessage) {
             case MONDAY_BUTTON:
                 String daySchedule = scheduleService.getForDay(scheduleRequest, 1, week);

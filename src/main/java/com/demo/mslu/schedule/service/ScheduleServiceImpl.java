@@ -1,5 +1,6 @@
 package com.demo.mslu.schedule.service;
 
+import com.demo.mslu.schedule.exception.ScheduleNotAvailableException;
 import com.demo.mslu.schedule.model.Schedule;
 import com.demo.mslu.schedule.model.ScheduleRequest;
 import com.demo.mslu.schedule.model.ScheduleResponse;
@@ -18,6 +19,7 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.Collection;
 
 import static com.demo.mslu.schedule.converter.ScheduleConverter.convertDayToTelegramResponse;
 import static com.demo.mslu.schedule.converter.ScheduleConverter.convertSheetToScheduleMap;
@@ -34,16 +36,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
     @Override
-    public String getForDay(@NotNull ScheduleRequest scheduleRequest, @NotNull Integer dayOfWeek, Week week) {
-    	if (scheduleIsNotSaved(week)) {
-    		requestSchedule(scheduleRequest, week);
-		}
+    public String getForDay(@NotNull ScheduleRequest scheduleRequest, @NotNull Integer dayOfWeek, Week week) throws ScheduleNotAvailableException {
+        if (scheduleIsNotSaved(week)) {
+            requestSchedule(scheduleRequest, week);
+        }
 
-    	return getDaySchedule(week, dayOfWeek);
+        return getDaySchedule(week, dayOfWeek);
     }
 
     @Override
-    public String getForWeek(@NotNull ScheduleRequest scheduleRequest, Week week) {
+    public String getForWeek(@NotNull ScheduleRequest scheduleRequest, Week week) throws ScheduleNotAvailableException {
         if (scheduleIsNotSaved(week)) {
             requestSchedule(scheduleRequest, week);
         }
@@ -57,24 +59,28 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     private String getDaySchedule(Week week, Integer dayOfWeek) {
-    	Schedule schedule = scheduleRepository.findByWeek(week).orElseThrow();
-    	return switch (dayOfWeek) {
-    		case 1 -> schedule.getMonday();
-    		case 2 -> schedule.getTuesday();
-    		case 3 -> schedule.getWednesday();
-			case 4 -> schedule.getThursday();
-			case 5 -> schedule.getFriday();
-			case 6 -> schedule.getSaturday();
-			default -> "";
-		};
-	}
+        Schedule schedule = scheduleRepository.findByWeek(week).orElseThrow();
+        return switch (dayOfWeek) {
+            case 1 -> schedule.getMonday();
+            case 2 -> schedule.getTuesday();
+            case 3 -> schedule.getWednesday();
+            case 4 -> schedule.getThursday();
+            case 5 -> schedule.getFriday();
+            case 6 -> schedule.getSaturday();
+            default -> "";
+        };
+    }
 
-    private void requestSchedule(@NotNull ScheduleRequest scheduleRequest, Week week) {
+    private void requestSchedule(@NotNull ScheduleRequest scheduleRequest, Week week) throws ScheduleNotAvailableException {
         scheduleRequest.setWeek(scheduleRequest.getWeek() + calculateWeek());
         final InputStream reportInputStream = scheduleRequester.requestReport(scheduleRequest);
         try {
             HSSFSheet sheet = new HSSFWorkbook(reportInputStream).getSheetAt(0);
             final Multimap<Integer, ScheduleResponse> subjects = convertSheetToScheduleMap(sheet);
+
+            if (scheduleIsNotAvailable(subjects)) {
+                throw new ScheduleNotAvailableException("Расписание недоступно. Повторите запрос позже");
+            }
 
             String monday = convertDayToTelegramResponse(1, subjects.get(1));
             String tuesday = convertDayToTelegramResponse(2, subjects.get(2));
@@ -97,6 +103,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean scheduleIsNotAvailable(Multimap<Integer, ScheduleResponse> subjects) {
+        Collection<ScheduleResponse> scheduleResponses = subjects.values();
+        return scheduleResponses.stream()
+                .allMatch(scheduleResponse -> scheduleResponse.getRoom().isEmpty() &&
+                        scheduleResponse.getSubjectAndTeacherName().isEmpty() &&
+                        scheduleResponse.getTime().isEmpty());
     }
 
     private boolean scheduleIsNotSaved(Week week) {

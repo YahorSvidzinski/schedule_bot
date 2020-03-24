@@ -1,7 +1,7 @@
 package com.demo.mslu.schedule.service;
 
+import com.demo.mslu.schedule.exception.ScheduleNotAvailableException;
 import com.demo.mslu.schedule.model.ScheduleRequest;
-import com.demo.mslu.schedule.model.constant.ButtonConstant;
 import com.demo.mslu.schedule.model.constant.Week;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -19,7 +19,7 @@ public interface BotService {
 
 	Optional<String> getIncomingMessage(Update update);
 
-	SendMessage createOutgoingMessage(@NotNull ScheduleRequest scheduleRequest, Long chatId, String incomingMessage, Week week);
+	SendMessage createOutgoingMessage(@NotNull ScheduleRequest scheduleRequest, Long chatId, String incomingMessage, Week week) throws ScheduleNotAvailableException;
 
 	ReplyKeyboardMarkup createKeyboardMarkup(String incomingMessage);
 }
